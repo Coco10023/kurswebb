@@ -1,1 +1,12 @@
-<p>courses works!</p>
+<h1>Kurser</h1>
+
+<p>Antal kurser: {{ courses.length }}</p>
+
+@for (course of courses; track course.courseCode) {
+  <article>
+    <h2>{{ course.courseCode }} - {{ course.courseName }}</h2>
+    <p>{{ course.points }} hp</p>
+    <p>{{ course.subject }}</p>
+    <a [href]="course.syllabus" target="_blank">Kursplan</a>
+  </article>
+}
