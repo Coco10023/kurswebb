@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course';
 import { Course } from '../../models/course';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-courses',
-  imports: [],
+  standalone: true,
+  imports: [FormsModule],
   templateUrl: './courses.html',
   styleUrl: './courses.css'
 })
@@ -18,4 +20,14 @@ export class Courses implements OnInit {
       this.courses = data;
     });
   }
+
+  searchText: string = '';
+
+  get filteredCourses(): Course[] {
+  return this.courses.filter(course =>
+    course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    course.courseCode.toLowerCase().includes(this.searchText.toLowerCase())
+  );
 }
+}
+
