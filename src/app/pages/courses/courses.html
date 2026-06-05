@@ -5,6 +5,16 @@
   placeholder="Sök kurs..."
   [(ngModel)]="searchText">
 
+  <label for="subject">Välj ämne:</label>
+
+<select id="subject" [(ngModel)]="selectedSubject">
+  <option value="">Alla ämnen</option>
+
+  @for (subject of subjects; track subject) {
+    <option [value]="subject">{{ subject }}</option>
+  }
+</select>
+
 <p>Antal kurser: {{ filteredCourses.length }}</p>
 
 @for (course of filteredCourses; track course.courseCode) {

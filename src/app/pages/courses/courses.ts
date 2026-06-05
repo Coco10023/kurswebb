@@ -23,11 +23,21 @@ export class Courses implements OnInit {
 
   searchText: string = '';
 
+  selectedSubject: string = '';
+
   get filteredCourses(): Course[] {
-  return this.courses.filter(course =>
-    course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    course.courseCode.toLowerCase().includes(this.searchText.toLowerCase())
-  );
+  return this.courses.filter(course => {
+    const matchesSearch = 
+      course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      course.courseCode.toLowerCase().includes(this.searchText.toLowerCase())
+
+      const matchesSubject = this.selectedSubject === '' || course.subject === this.selectedSubject;
+      return matchesSearch && matchesSubject;
+  });
 }
+
+  get subjects(): string[] {
+    return[...new Set(this.courses.map(course => course.subject))].sort();
+  }
 }
 
