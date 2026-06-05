@@ -1,20 +1,25 @@
 <h1>Kurser</h1>
 
-  <input
+<!-- Sökfält för filtrering på kurskod eller kursnamn -->
+<input
   type="text"
   placeholder="Sök kurs..."
   [(ngModel)]="searchText">
 
-  <label for="subject">Välj ämne:</label>
+<!-- Dropdown för filtrering på ämne -->
+<label for="subject">Välj ämne:</label>
 
 <select id="subject" [(ngModel)]="selectedSubject">
+  <!-- Visar samtliga ämnen -->
   <option value="">Alla ämnen</option>
 
+  <!-- Skapar en lista med tillgängliga ämnen -->
   @for (subject of subjects; track subject) {
     <option [value]="subject">{{ subject }}</option>
   }
 </select>
 
+<!-- Dropdown för sortering av kurser -->
 <label for="sort">Sortera efter:</label>
 
 <select id="sort" [(ngModel)]="sortBy">
@@ -24,14 +29,21 @@
   <option value="subject">Ämne</option>
 </select>
 
+<!-- Visar antal kurser efter sökning och filtrering -->
 <p>Antal kurser: {{ filteredCourses.length }}</p>
 
+<!-- Skriver ut alla filtrerade kurser -->
 @for (course of filteredCourses; track course.courseCode) {
   <article>
     <h2>{{ course.courseCode }} - {{ course.courseName }}</h2>
+
+    <!-- Kursens högskolepoäng -->
     <p>{{ course.points }} hp</p>
+
+    <!-- Kursens ämnesområde -->
     <p>{{ course.subject }}</p>
+
+    <!-- Länk till kursplan -->
     <a [href]="course.syllabus" target="_blank">Kursplan</a>
   </article>
 }
-
