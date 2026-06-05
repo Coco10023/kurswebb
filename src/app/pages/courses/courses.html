@@ -15,6 +15,15 @@
   }
 </select>
 
+<label for="sort">Sortera efter:</label>
+
+<select id="sort" [(ngModel)]="sortBy">
+  <option value="courseCode">Kurskod</option>
+  <option value="courseName">Kursnamn</option>
+  <option value="points">Poäng</option>
+  <option value="subject">Ämne</option>
+</select>
+
 <p>Antal kurser: {{ filteredCourses.length }}</p>
 
 @for (course of filteredCourses; track course.courseCode) {

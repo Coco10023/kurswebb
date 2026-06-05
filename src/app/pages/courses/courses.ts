@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './courses.html',
   styleUrl: './courses.css'
 })
+
 export class Courses implements OnInit {
   courses: Course[] = [];
 
@@ -25,19 +26,31 @@ export class Courses implements OnInit {
 
   selectedSubject: string = '';
 
-  get filteredCourses(): Course[] {
-  return this.courses.filter(course => {
-    const matchesSearch = 
-      course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      course.courseCode.toLowerCase().includes(this.searchText.toLowerCase())
+  sortBy: string = 'courseCode';
 
-      const matchesSubject = this.selectedSubject === '' || course.subject === this.selectedSubject;
+  get filteredCourses(): Course[] {
+    const filtered = this.courses.filter(course => {
+      const matchesSearch =
+        course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
+        course.courseCode.toLowerCase().includes(this.searchText.toLowerCase());
+
+      const matchesSubject =
+        this.selectedSubject === '' || course.subject === this.selectedSubject;
+
       return matchesSearch && matchesSubject;
-  });
-}
+    });
+
+    return filtered.sort((a, b) => {
+      if (this.sortBy === 'points') {
+        return a.points - b.points;
+      }
+
+      return String(a[this.sortBy as keyof Course])
+        .localeCompare(String(b[this.sortBy as keyof Course]));
+    });
+  }
 
   get subjects(): string[] {
-    return[...new Set(this.courses.map(course => course.subject))].sort();
+    return [...new Set(this.courses.map(course => course.subject))].sort();
   }
 }
-
