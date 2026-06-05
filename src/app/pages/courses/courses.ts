@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from '../../services/course';
 import { Course } from '../../models/course';
 import { FormsModule } from '@angular/forms';
+import { ScheduleService } from '../../services/schedule';
 
 @Component({
   selector: 'app-courses',
@@ -17,7 +18,9 @@ export class Courses implements OnInit {
   courses: Course[] = [];
 
   // Injicerar CourseService för att kunna hämta kursdata
-  constructor(private courseService: CourseService) {}
+  constructor(private courseService: CourseService,
+    private scheduleService: ScheduleService
+  ) {}
 
   // Körs när komponenten laddas
   ngOnInit(): void {
@@ -26,6 +29,10 @@ export class Courses implements OnInit {
     this.courseService.getCourses().subscribe((data) => {
       this.courses = data;
     });
+  }
+
+  addToSchedule(course: Course): void { 
+    this.scheduleService.addCourse(course); 
   }
 
   // Variabel för sökning på kurskod eller kursnamn
