@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CourseService } from '../../services/course';
+import { ScheduleService } from '../../services/schedule';
 import { Course } from '../../models/course';
 import { FormsModule } from '@angular/forms';
-import { ScheduleService } from '../../services/schedule';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-courses',
@@ -11,71 +12,48 @@ import { ScheduleService } from '../../services/schedule';
   templateUrl: './courses.html',
   styleUrl: './courses.css'
 })
+export class Courses {
+  private courseService = inject(CourseService);
+  private scheduleService = inject(ScheduleService);
 
-export class Courses implements OnInit {
+  searchText = signal('');
+  selectedSubject = signal('');
+  sortBy = signal<keyof Course>('courseCode');
 
-  // Array som lagrar alla kurser från JSON-filen
-  courses: Course[] = [];
+  courses = toSignal(this.courseService.getCourses(), {
+    initialValue: [] as Course[]
+  });
 
-  // Injicerar CourseService för att kunna hämta kursdata
-  constructor(private courseService: CourseService,
-    private scheduleService: ScheduleService
-  ) {}
+  subjects = computed(() => {
+    return [...new Set(this.courses().map(course => course.subject))].sort();
+  });
 
-  // Körs när komponenten laddas
-  ngOnInit(): void {
+  filteredCourses = computed(() => {
+    const search = this.searchText().toLowerCase();
+    const subject = this.selectedSubject();
+    const sort = this.sortBy();
 
-    // Hämtar kursdata från CourseService och sparar i courses-arrayen
-    this.courseService.getCourses().subscribe((data) => {
-      this.courses = data;
-    });
-  }
-
-  addToSchedule(course: Course): void { 
-    this.scheduleService.addCourse(course); 
-  }
-
-  // Variabel för sökning på kurskod eller kursnamn
-  searchText: string = '';
-
-  // Variabel för valt ämne i dropdown-menyn
-  selectedSubject: string = '';
-
-  // Variabel som styr vilken sortering som används
-  sortBy: string = 'courseCode';
-
-  // Returnerar filtrerade och sorterade kurser
-  get filteredCourses(): Course[] {
-
-    // Filtrerar kurser baserat på söktext och valt ämne
-    const filtered = this.courses.filter(course => {
-
+    const filtered = this.courses().filter(course => {
       const matchesSearch =
-        course.courseName.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        course.courseCode.toLowerCase().includes(this.searchText.toLowerCase());
+        course.courseName.toLowerCase().includes(search) ||
+        course.courseCode.toLowerCase().includes(search);
 
       const matchesSubject =
-        this.selectedSubject === '' || course.subject === this.selectedSubject;
+        subject === '' || course.subject === subject;
 
       return matchesSearch && matchesSubject;
     });
 
-    // Sorterar den filtrerade listan
     return filtered.sort((a, b) => {
-
-      // Numerisk sortering för högskolepoäng
-      if (this.sortBy === 'points') {
+      if (sort === 'points') {
         return a.points - b.points;
       }
 
-      // Alfabetisk sortering för övriga fält
-      return String(a[this.sortBy as keyof Course])
-        .localeCompare(String(b[this.sortBy as keyof Course]));
+      return String(a[sort]).localeCompare(String(b[sort]));
     });
-  }
+  });
 
-  // Hämtar unika ämnen för dropdown-menyn och sorterar dem alfabetiskt
-  get subjects(): string[] {
-    return [...new Set(this.courses.map(course => course.subject))].sort();
+  addToSchedule(course: Course): void {
+    this.scheduleService.addCourse(course);
   }
 }

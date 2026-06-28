@@ -4,17 +4,19 @@
 <input
   type="text"
   placeholder="Sök kurs..."
-  [(ngModel)]="searchText">
+  [ngModel]="searchText()"
+  (ngModelChange)="searchText.set($event)">
 
 <!-- Dropdown för filtrering på ämne -->
 <label for="subject">Välj ämne:</label>
 
-<select id="subject" [(ngModel)]="selectedSubject">
-  <!-- Visar samtliga ämnen -->
+<select
+  id="subject"
+  [ngModel]="selectedSubject()"
+  (ngModelChange)="selectedSubject.set($event)">
   <option value="">Alla ämnen</option>
 
-  <!-- Skapar en lista med tillgängliga ämnen -->
-  @for (subject of subjects; track subject) {
+  @for (subject of subjects(); track subject) {
     <option [value]="subject">{{ subject }}</option>
   }
 </select>
@@ -22,7 +24,10 @@
 <!-- Dropdown för sortering av kurser -->
 <label for="sort">Sortera efter:</label>
 
-<select id="sort" [(ngModel)]="sortBy">
+<select
+  id="sort"
+  [ngModel]="sortBy()"
+  (ngModelChange)="sortBy.set($event)">
   <option value="courseCode">Kurskod</option>
   <option value="courseName">Kursnamn</option>
   <option value="points">Poäng</option>
@@ -30,23 +35,22 @@
 </select>
 
 <!-- Visar antal kurser efter sökning och filtrering -->
-<p>Antal kurser: {{ filteredCourses.length }}</p>
+<p>Antal kurser: {{ filteredCourses().length }}</p>
 
 <!-- Skriver ut alla filtrerade kurser -->
-@for (course of filteredCourses; track course.courseCode) {
+@for (course of filteredCourses(); track course.courseCode) {
   <article>
     <h2>{{ course.courseCode }} - {{ course.courseName }}</h2>
 
-    <!-- Kursens högskolepoäng -->
     <p>{{ course.points }} hp</p>
-
-    <!-- Kursens ämnesområde -->
     <p>{{ course.subject }}</p>
 
-    <!-- Länk till kursplan -->
     <a [href]="course.syllabus" target="_blank">Kursplan</a>
-    
-    <button type="button" (click)="addToSchedule(course)"> Lägg till i ramschema </button>
 
+    <button
+      type="button"
+      (click)="addToSchedule(course)">
+      Lägg till i ramschema
+    </button>
   </article>
 }
