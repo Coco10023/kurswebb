@@ -1,59 +1,39 @@
-# Kurswebb
+# Kurswebb för fiktivt lärosäte
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.9.
+Detta projekt är utvecklat med Angular och TypeScript som en del av kursen typescript vid Mittuniversitetet.
 
-## Development server
+Syftet med applikationen är att låta användare söka bland kurser, filtrera och sortera kursutbudet samt skapa ett eget ramschema.
 
-To start a local development server, run:
+## Funktioner
 
-```bash
-ng serve
-```
+* Visar kursdata från en extern JSON-fil
+* Sökning på kurskod och kursnamn
+* Filtrering på ämne
+* Sortering på kurskod, kursnamn, poäng och ämne
+* Visar antal kurser i aktuell sökning
+* Möjlighet att lägga till kurser i ett eget ramschema
+* Förhindrar dubletter i ramschemat
+* Möjlighet att ta bort kurser från ramschemat
+* Beräknar totalt antal högskolepoäng
+* Sparar ramschema med localStorage
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Tekniker
 
-## Code scaffolding
+* Angular
+* TypeScript
+* HTML
+* CSS
+* Git
+* GitHub Pages
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## Publicerad webbplats
 
-```bash
-ng generate component component-name
-```
+Länk: https://coco10023.github.io/kurswebb/ 
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## GitHub Repository
 
-```bash
-ng generate --help
-```
+Länk: https://github.com/Coco10023/kurswebb.git
 
-## Building
+## Betygsnivå
 
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Projektet är utvecklat för att uppfylla grundkraven för betyget E enligt uppgiftsbeskrivningen.
